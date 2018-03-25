@@ -10,7 +10,7 @@ import time
 class Handler(BaseHTTPRequestHandler):
 
     def write_file(self):
-        # Create or Append Logs to file (ip address, port, method, path, HTTP version
+        # Create or Append Logs to file (Date and time, ip address, port, method, path, HTTP version)
         text_file = open("log.txt", "a")
         text_file.write("{0} {1} {2} {3}\n".format(time.asctime(), self.client_address, self.command, self.path, self.request_version))
         text_file.close()
@@ -18,12 +18,12 @@ class Handler(BaseHTTPRequestHandler):
     # Handler For GET requests
     def do_GET(self):
         self.send_response(200)
-        # Can also add headers to the response E.g
+        # Option to add headers to the response E.g
         # self.send_header('Content-type','text/html')
         self.end_headers()
         self.write_file()
 
-        # Can Also Send HTML Message As Response
+        # Option to Send HTML Message As Response
         # self.wfile.write("<h1>HTML EVER</h1>")
 
 def LoggingOutput(level, msg):
@@ -43,6 +43,7 @@ def LoggingOutput(level, msg):
         logger.critical(msg)
 
 def main():
+    # Check system arguments from user
     if len(sys.argv) > 2:
         LoggingOutput("error", "Too Many Arguments")
         sys.exit()
