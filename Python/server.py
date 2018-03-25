@@ -68,4 +68,7 @@ def main():
         WebServer.socket.close()
 
 if __name__ == '__main__':
-    main()
+    if isinstance(sys.argv[1], int):
+        main()
+    else:
+        LoggingOutput("error", "Invalid Port Number")
