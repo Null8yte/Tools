@@ -19,7 +19,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         # Option to add headers to the response E.g
-        self.send_header('Server','Apache 200')
+        # self.send_header('Content-Type','text/html')
         self.end_headers()
         self.write_file()
 
@@ -43,17 +43,7 @@ def LoggingOutput(level, msg):
     elif level == "critical":
         logger.critical(msg)
 
-def main():
-    # Check system arguments from user
-    if len(sys.argv) > 2:
-        LoggingOutput("error", "Too Many Arguments")
-        sys.exit()
-    elif len(sys.argv) > 1 and (int(sys.argv[1]) > 0 and int(sys.argv[1]) < 65536):
-        PORT = int(sys.argv[1])
-    else:
-        LoggingOutput("error", "Invalid Port Number")
-        sys.exit()
-
+def main(PORT):
     try:
         # Create a Web Server and using the handler to manage incoming requests.
         WebServer = HTTPServer(('', PORT), Handler)
@@ -68,9 +58,25 @@ def main():
         LoggingOutput("debug", "Logs Saved to file {0}".format(Current_Path))
         WebServer.socket.close()
 
-if __name__ == '__main__':
-    # Check if user input is digit
-    if not sys.argv[1].isdigit():
-        LoggingOutput("error", "Invalid Port Number")
+def ValidateInput(Input):
+    if len(sys.argv) > 2:
+        LoggingOutput("error", "Too Many Arguments")
+        sys.exit()
+    elif Input.isdigit():
+        if int(Input) > 0 and int(Input) < 65536:
+            return True
+        else:
+            return False
     else:
-        main()
+        return False
+
+if __name__ == '__main__':
+    try:
+        valid = ValidateInput(sys.argv[1])
+        if valid:
+            PORT = int(sys.argv[1])
+            main(PORT)
+        else:
+            LoggingOutput("error", "Invalid Port Number")
+    except:
+        LoggingOutput("error", "Please Specify Port Number")
