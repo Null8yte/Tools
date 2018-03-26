@@ -15,7 +15,7 @@ class Handler(BaseHTTPRequestHandler):
         text_file.write("{0} {1} {2} {3}\n".format(time.asctime(), self.client_address, self.command, self.path, self.request_version))
         text_file.close()
 
-    # Handler For GET requests
+    # Handler For GET Requests
     def do_GET(self):
         self.send_response(200)
         # Option to add headers to the response E.g
@@ -26,6 +26,7 @@ class Handler(BaseHTTPRequestHandler):
         # Option to Send HTML Message As Response
         # self.wfile.write("<h1>HTML EVER</h1>")
 
+# Simple function to color and logging
 def LoggingOutput(level, msg):
     logger = logging.getLogger(__name__)
     coloredlogs.install(level='DEBUG')
@@ -68,6 +69,7 @@ def main():
         WebServer.socket.close()
 
 if __name__ == '__main__':
+    # Check if user input is digit
     if not sys.argv[1].isdigit():
         LoggingOutput("error", "Invalid Port Number")
     else:
