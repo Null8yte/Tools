@@ -19,7 +19,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         # Option to add headers to the response E.g
-        # self.send_header('Content-type','text/html')
+        self.send_header('Server','Apache 200')
         self.end_headers()
         self.write_file()
 
@@ -68,7 +68,7 @@ def main():
         WebServer.socket.close()
 
 if __name__ == '__main__':
-    if isinstance(sys.argv[1], int):
-        main()
-    else:
+    if not sys.argv[1].isdigit():
         LoggingOutput("error", "Invalid Port Number")
+    else:
+        main()
