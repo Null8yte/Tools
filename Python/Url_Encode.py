@@ -32,13 +32,13 @@ def encode(file):
 
 def main(choice, filename):
 	if choice == "1":
-		decode(filename)
-	elif choice == "2":
 		encode(filename)
+	elif choice == "2":
+		decode(filename)
 	else:
 		print "Unknown operation"
 
 if __name__ == '__main__':
-	chioce = raw_input("Enter 1 to Decode\nEnter 2 to Encode > ")
+	chioce = raw_input("Enter 1 to Encode\nEnter 1 to Decode > ")
 	filename = raw_input("Enter Filename > ")
 	main(chioce, filename)
