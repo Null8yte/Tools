@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# This script used for url encoding and decoding file.
+# This script used for url encoding and decoding file
 
 import sys
 import urllib2
