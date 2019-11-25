@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-import sys, os
+import sys, os, optparse
 import coloredlogs, logging
 import time
 
@@ -43,11 +43,11 @@ def LoggingOutput(level, msg):
     elif level == "critical":
         logger.critical(msg)
 
-def main(PORT):
+def server(Port):
     try:
         # Create a Web Server and using the handler to manage incoming requests.
-        WebServer = HTTPServer(('', PORT), Handler)
-        LoggingOutput("debug", "Started HTTPServer on port {0}".format(PORT))
+        WebServer = HTTPServer(('', Port), Handler)
+        LoggingOutput("debug", "Started HTTPServer on port {0}".format(Port))
 
         # Wait forever for incoming requests
         WebServer.serve_forever()
@@ -58,25 +58,20 @@ def main(PORT):
         LoggingOutput("debug", "Logs Saved to file {0}".format(Current_Path))
         WebServer.socket.close()
 
-def ValidateInput(Input):
-    if len(sys.argv) > 2:
-        LoggingOutput("error", "Too Many Arguments")
-        sys.exit()
-    elif Input.isdigit():
-        if int(Input) > 0 and int(Input) < 65536:
-            return True
-        else:
-            return False
-    else:
-        return False
+def main():
+    parser = optparse.OptionParser(description='Python Logging Server')
+    parser.add_option("-p", "--port", dest="server", help='Accept Ports from 1-65535', metavar="String")
+    
+    (options, args) = parser.parse_args()
+
+    if options.server:
+        if options.server.isdigit():
+            if int(options.server) > 0 and int(options.server) < 65536:
+                server(int(options.server))
+            else:
+                parser.error("accept ports from 1-65535")
+    elif len(args) != 1:
+        parser.error("incorrect number of arguments")
 
 if __name__ == '__main__':
-    try:
-        valid = ValidateInput(sys.argv[1])
-        if valid:
-            PORT = int(sys.argv[1])
-            main(PORT)
-        else:
-            LoggingOutput("error", "Invalid Port Number")
-    except:
-        LoggingOutput("error", "Please Specify Port Number")
+    main()
